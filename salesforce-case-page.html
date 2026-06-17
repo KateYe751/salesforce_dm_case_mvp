@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case-00123456 | Delivery Management</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Salesforce Sans',-apple-system,'Segoe UI',Arial,sans-serif;background:#f3f2f2;color:#3e3e3c;font-size:13px;line-height:1.5}
+a{color:#0176d3;text-decoration:none}a:hover{text-decoration:underline}
+input,select,textarea{font-family:inherit}
+
+.sf-nav{background:#0176d3;height:50px;display:flex;align-items:center;padding:0 20px;gap:16px}
+.sf-nav .logo{color:#fff;font-size:18px;font-weight:700;letter-spacing:-0.5px}
+.sf-nav-links{display:flex;gap:2px;margin-left:12px}
+.sf-nav-links span{color:rgba(255,255,255,.85);padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px}
+.sf-nav-links span:hover{background:rgba(255,255,255,.15)}
+.sf-nav-right{margin-left:auto}
+.sf-avatar{width:30px;height:30px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0176d3;cursor:pointer}
+
+.page-header{background:#fff;padding:12px 24px 0;border-bottom:1px solid #dddbda;box-shadow:0 2px 4px rgba(0,0,0,.06)}
+.breadcrumb{font-size:11px;color:#706e6b;margin-bottom:6px}
+.case-title-row{display:flex;align-items:center;gap:12px;padding-bottom:12px}
+.case-icon{width:40px;height:40px;background:#ea001e;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex-shrink:0}
+.case-title-info h1{font-size:17px;font-weight:700;color:#181818}
+.case-title-info .meta{font-size:11px;color:#706e6b;margin-top:2px}
+.page-actions{margin-left:auto;display:flex;gap:8px}
+.btn{padding:6px 14px;border-radius:4px;border:1px solid #dddbda;background:#fff;cursor:pointer;font-size:12px;color:#181818;font-weight:500}
+.btn:hover{background:#f3f2f2}
+.btn-primary{background:#0176d3;color:#fff;border-color:#0176d3}
+.btn-primary:hover{background:#0070c0}
+
+.content{padding:16px 24px;max-width:1400px;margin:0 auto}
+
+.card{background:#fff;border:1px solid #dddbda;border-radius:4px;margin-bottom:14px;overflow:hidden}
+.card-header{background:#f3f2f2;padding:9px 16px;border-bottom:1px solid #dddbda;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-header h2{font-size:12px;font-weight:700;color:#181818;text-transform:uppercase;letter-spacing:.5px}
+.card-header .sub{font-size:11px;color:#706e6b;font-weight:400}
+.card-body{padding:16px}
+
+.sec-bar{display:flex;align-items:center;gap:10px;margin:18px 0 10px}
+.sec-num{width:22px;height:22px;background:#0176d3;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.sec-num.gray{background:#706e6b}
+.sec-title{font-size:15px;font-weight:700;color:#181818}
+.sec-sub{font-size:11px;color:#706e6b;margin-left:auto}
+
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.fi{display:flex;flex-direction:column;gap:3px}
+.fi.s2{grid-column:span 2}
+.fi.s3{grid-column:span 3}
+.fl{font-size:10px;font-weight:700;color:#706e6b;text-transform:uppercase;letter-spacing:.4px}
+.fl .new-badge{font-size:9px;background:#c9f0ff;color:#0176d3;padding:1px 4px;border-radius:3px;font-weight:700;margin-left:4px;text-transform:none}
+.fl .exist-badge{font-size:9px;color:#b0adab;font-weight:400;text-transform:none}
+.fv{font-size:13px;color:#181818;padding:3px 0;border-bottom:1px solid transparent}
+.fv.edit{border-bottom:1px solid #dddbda;padding:4px 6px;border-radius:2px}
+.fv.edit:hover{border-bottom-color:#0176d3}
+.fv input,.fv select{border:none;background:transparent;font-size:13px;color:#181818;width:100%;outline:none;cursor:pointer}
+.fv textarea{border:1px solid #dddbda;border-radius:3px;padding:6px;font-size:12px;width:100%;outline:none;resize:vertical}
+.fv textarea:hover{border-color:#0176d3}
+.fv.link input{color:#0176d3}
+.placeholder{color:#b0adab}
+
+/* ── MILESTONES ── */
+.ms-banner{background:#fff;border:1px solid #dddbda;border-radius:4px;margin-bottom:14px;overflow:hidden}
+.ms-header{background:linear-gradient(135deg,#032d60 0%,#0176d3 100%);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.ms-header h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.ms-header .cur{font-size:11px;color:rgba(255,255,255,.75);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:10px}
+.ms-body{padding:20px 20px 16px;overflow-x:auto}
+.ms-track{display:flex;align-items:flex-start;position:relative;min-width:1020px;padding-top:6px}
+.ms-line{position:absolute;top:22px;left:16px;right:16px;height:3px;background:#e0e0e0;z-index:0}
+.ms-fill{height:100%;background:linear-gradient(to right,#04844b,#2e844a);transition:width .3s}
+.ms-node{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;min-width:0}
+.ms-dot{width:30px;height:30px;border-radius:50%;border:3px solid #e0e0e0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#b0adab;cursor:pointer;transition:all .2s;flex-shrink:0}
+.ms-dot.done{background:#04844b;border-color:#04844b;color:#fff}
+.ms-dot.active{background:#0176d3;border-color:#0176d3;color:#fff;box-shadow:0 0 0 5px rgba(1,118,211,.18)}
+.ms-label{margin-top:7px;text-align:center;padding:0 2px}
+.ms-num{font-size:9px;font-weight:700;color:#706e6b;text-transform:uppercase;letter-spacing:.3px}
+.ms-name{font-size:11px;font-weight:600;color:#181818;line-height:1.3;margin-top:1px}
+.ms-desc{font-size:9px;color:#706e6b;line-height:1.3;margin-top:2px}
+.ms-node.done .ms-num,.ms-node.done .ms-name{color:#04844b}
+.ms-node.active .ms-num,.ms-node.active .ms-name{color:#0176d3}
+.ms-tags{display:flex;flex-direction:column;gap:3px;margin-top:7px;align-items:center;width:100%;padding:0 2px}
+.rtag{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:700;white-space:normal;cursor:pointer;text-align:center;line-height:1.3;display:block;width:100%}
+.rtag.comm{background:#fce7a5;color:#6b3a00}
+.rtag.tech{background:#c9f0ff;color:#005eb8}
+.rtag.prod{background:#d4f5e0;color:#0a6042}
+.rtag.ops{background:#ffe8d6;color:#a33900}
+.rtag.cust{background:#ead9ff;color:#5a2b8c}
+.rtag.bau{background:#fce7e7;color:#a8001c}
+.golive-tag{background:#fff8e1;border:1px solid #ffb300;border-radius:4px;padding:3px 8px;font-size:9px;font-weight:700;color:#6b4800;margin-top:5px;display:block;width:100%;text-align:center}
+
+/* ── READINESS OVERVIEW ── */
+.r-overview{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
+.r-card{background:#fff;border:1px solid #dddbda;border-radius:4px;padding:10px 8px;text-align:center;cursor:pointer;transition:box-shadow .15s,opacity .2s,border-color .2s}
+.r-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.r-card.dim{opacity:.45}
+.r-card.complete{border-color:#04844b;background:#f2faf5}
+.r-card h4{font-size:10px;font-weight:700;color:#181818;margin-bottom:5px;line-height:1.3}
+.r-card .oc-emoji{font-size:18px;margin-bottom:3px;transition:all .2s}
+.r-card .oc-prog{font-size:10px;color:#706e6b;transition:all .2s}
+.r-card .oc-state{font-size:9px;font-weight:700;margin-top:3px;transition:all .2s}
+.overall-bar{background:#f3f2f2;border:1px solid #dddbda;border-radius:4px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;transition:background .3s}
+.overall-bar.all-done{background:#d4f5e0;border-color:#04844b}
+.overall-bar h3{font-size:13px;font-weight:700}
+.overall-bar .note{font-size:11px;color:#706e6b}
+.overall-count{font-size:22px;font-weight:700;color:#0176d3;text-align:right;transition:color .2s}
+.overall-count.done{color:#04844b}
+.overall-count .sub{font-size:11px;color:#706e6b;font-weight:400}
+
+/* ── STATUS LEGEND ── */
+.legend-card{background:#fff;border:1px solid #dddbda;border-radius:4px;padding:14px;margin-bottom:12px}
+.legend-card h3{font-size:11px;font-weight:700;text-transform:uppercase;color:#706e6b;margin-bottom:10px;letter-spacing:.4px}
+.legend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lg-item{display:flex;gap:8px;align-items:flex-start}
+.sbadge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.s-green{background:#d4f5e0;color:#0a6042}
+.s-yellow{background:#fff8e1;color:#6b4800}
+.s-red{background:#fce7e7;color:#a8001c}
+.s-ns{background:#f3f2f2;color:#706e6b}
+.s-na{background:#f3f2f2;color:#706e6b;font-style:italic}
+.s-done{background:#d4f5e0;color:#0a6042}
+.lg-text h4{font-size:11px;font-weight:600;margin-bottom:1px}
+.lg-text p{font-size:10px;color:#706e6b}
+.lg-text em{font-size:9px;color:#b0adab}
+
+/* ── READINESS SECTIONS WITH VERTICAL TAB ── */
+.rs-wrap{display:flex;margin-bottom:10px;border-radius:4px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.rs-vtab{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  padding:14px 7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:30px;
+  cursor:pointer;
+  user-select:none;
+  flex-shrink:0;
+  transition:filter .15s;
+}
+.rs-vtab:hover{filter:brightness(1.12)}
+.rs-vtab.v-comm  {background:#b8860b}
+.rs-vtab.v-techp {background:#0176d3}
+.rs-vtab.v-prod  {background:#04844b}
+.rs-vtab.v-teche {background:#0570ae}
+.rs-vtab.v-ops   {background:#d06000}
+.rs-vtab.v-cust  {background:#7b5ea7}
+.rs-vtab.v-bau   {background:#ba0517}
+.rs-inner{flex:1;min-width:0;display:flex;flex-direction:column}
+
+.rs-header{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#f3f2f2;border:1px solid #dddbda;border-left:none;cursor:pointer;user-select:none;transition:background .15s}
+.rs-header:hover{background:#e8e8e8}
+.rs-header h3{font-size:12px;font-weight:700;flex-shrink:0}
+.rs-header .desc{font-size:11px;color:#706e6b}
+.ms-badge{font-size:9px;background:#e8e8e8;border:1px solid #dddbda;padding:1px 6px;border-radius:8px;color:#706e6b;flex-shrink:0}
+.rs-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.toggle{font-size:12px;color:#706e6b;display:inline-block}
+
+.rs-table-wrap{border:1px solid #dddbda;border-top:none;border-left:none;flex:1;overflow:hidden}
+table.rt{width:100%;border-collapse:collapse}
+table.rt th{background:#fafaf9;padding:7px 12px;text-align:left;font-size:10px;font-weight:700;color:#706e6b;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #e0e0e0}
+table.rt td{padding:8px 12px;font-size:12px;border-bottom:1px solid #f0eeed;vertical-align:top}
+table.rt tr:last-child td{border-bottom:none}
+table.rt tr:hover td{background:#fafaf9}
+.iname{font-weight:600;color:#181818;margin-bottom:2px}
+.idesc{font-size:10px;color:#706e6b;line-height:1.4}
+
+.ss{border:1px solid #dddbda;border-radius:3px;padding:3px 5px;font-size:11px;background:#fff;cursor:pointer;outline:none;min-width:110px;width:100%;transition:border-color .15s}
+.ss:focus{border-color:#0176d3}
+.ws{border:1px solid #dddbda;border-radius:3px;padding:3px 5px;font-size:11px;background:#fff;cursor:pointer;outline:none;width:100%}
+
+/* ── POST DELIVERY ── */
+.rating-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.r-score-card{background:#fff;border:1px solid #dddbda;border-radius:4px;padding:16px}
+.r-score-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.r-score-card .rdesc{font-size:12px;color:#706e6b;margin-bottom:14px;line-height:1.4}
+.star-row{display:flex;gap:8px;margin-bottom:10px}
+.star{width:34px;height:34px;border-radius:50%;border:2px solid #dddbda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:#706e6b;transition:all .15s}
+.star:hover,.star.on{background:#0176d3;border-color:#0176d3;color:#fff}
+.rscale{font-size:10px;color:#706e6b;line-height:1.6}
+.rscale span{font-weight:700;color:#181818}
+
+/* ── WEEKLY UPDATE ── */
+.wu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.wu-field{background:#f3f2f2;border:1px solid #dddbda;border-radius:4px;padding:10px 12px}
+.wu-field.s2{grid-column:span 2}
+.wl{font-size:9px;font-weight:700;text-transform:uppercase;color:#706e6b;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.wl .dm-b{font-size:8px;background:#c9f0ff;color:#0176d3;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:none}
+.wl .fm-b{font-size:8px;background:#d4f5e0;color:#04844b;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:none}
+.wv{font-size:12px;color:#181818}
+.wv.formula{color:#04844b;font-size:11px}
+.wv input,.wv select{border:none;background:transparent;font-size:12px;color:#181818;width:100%;outline:none;cursor:pointer}
+
+/* ── MILESTONE AUTO-COMPLETE ANIMATION ── */
+@keyframes msDing {
+  0%   { transform:scale(1); }
+  40%  { transform:scale(1.35); box-shadow:0 0 0 8px rgba(4,132,75,.22); }
+  100% { transform:scale(1); }
+}
+.ms-dot.ding { animation: msDing .5s ease forwards; }
+
+/* ── DELIVERABLE LINKS ── */
+.del-wrap{margin-top:5px}
+.del-link{font-size:10px;color:#0176d3;cursor:pointer;opacity:.55;font-style:italic;white-space:nowrap}
+.del-link:hover{opacity:1;text-decoration:underline}
+.del-input{display:none;font-size:10px;border:1px solid #0176d3;border-radius:3px;padding:2px 5px;width:100%;outline:none;color:#0176d3;margin-top:2px}
+.del-wrap.linked .del-link{opacity:1;font-style:normal}
+.del-doc-link{font-size:10px;color:#0176d3;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.del-doc-link:hover{text-decoration:underline}
+.del-clear{font-size:9px;color:#b0adab;cursor:pointer;margin-left:4px}
+.del-clear:hover{color:#a8001c}
+
+.divider{height:1px;background:#e0e0e0;margin:20px 0}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#f3f2f2}
+::-webkit-scrollbar-thumb{background:#b0adab;border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav class="sf-nav">
+  <span class="logo">⚡ Salesforce</span>
+  <div class="sf-nav-links">
+    <span>Home</span><span>Cases</span><span>Accounts</span><span>Contacts</span><span>Reports</span>
+  </div>
+  <div class="sf-nav-right"><div class="sf-avatar">ST</div></div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="#">Cases</a> › <span>Case-00123456</span></div>
+  <div class="case-title-row">
+    <div class="case-icon">C</div>
+    <div class="case-title-info">
+      <h1>Case-00123456 &nbsp;·&nbsp; Acme Corp — Global Payments Expansion (FX + Collections)</h1>
+      <div class="meta">Delivery Management &nbsp;·&nbsp; Created 15 Jan 2026 &nbsp;·&nbsp; Modified Today &nbsp;·&nbsp; Owner: Sarah Tan (DM)</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn">Edit</button>
+      <button class="btn">Clone</button>
+      <button class="btn btn-primary">+ Weekly Update</button>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══ SECTION 1 ══ -->
+<div class="sec-bar" style="margin-top:6px">
+  <div class="sec-num">1</div>
+  <span class="sec-title">Account Information</span>
+  <span class="sec-sub">Synced from Account record · SE Case Page fields</span>
+</div>
+<div class="card">
+  <div class="card-header"><h2>Account Info</h2><span class="sub">Read-only — pulled from Account</span></div>
+  <div class="card-body">
+    <div class="fg">
+      <div class="fi"><span class="fl">Account Name</span><span class="fv placeholder">Acme Corporation</span></div>
+      <div class="fi"><span class="fl">Account ID</span><span class="fv placeholder">001XX000003GYuT</span></div>
+      <div class="fi"><span class="fl">Region</span><span class="fv placeholder">APAC</span></div>
+      <div class="fi"><span class="fl">Account Tier</span><span class="fv placeholder">Enterprise</span></div>
+      <div class="fi"><span class="fl">Industry</span><span class="fv placeholder">Financial Services</span></div>
+      <div class="fi"><span class="fl">Account Manager</span><span class="fv placeholder">Jane Smith</span></div>
+      <div class="fi"><span class="fl">Country / Market</span><span class="fv placeholder">Singapore, AU, HK</span></div>
+      <div class="fi"><span class="fl">Contract Start Date</span><span class="fv placeholder">—</span></div>
+      <div class="fi"><span class="fl">Annual Revenue</span><span class="fv placeholder">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 2 ══ -->
+<div class="sec-bar">
+  <div class="sec-num">2</div>
+  <span class="sec-title">Project Information</span>
+  <span class="sec-sub">Ownership · Links · Complexity · Forecast</span>
+</div>
+<div class="card">
+  <div class="card-header"><h2>Project Info</h2><span class="sub">★ = New Custom Field</span></div>
+  <div class="card-body">
+    <div class="fg" style="margin-bottom:14px">
+      <div class="fi"><span class="fl">Case Number <span class="exist-badge">(Case Number)</span></span><span class="fv"><a href="#">Case-00123456</a></span></div>
+      <div class="fi s2"><span class="fl">Case Content — Client + Subject <span class="exist-badge">(Subject)</span></span><span class="fv edit"><input type="text" value="Acme Corp — Global Payments Expansion (FX + Collections)"></span></div>
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <div class="fi"><span class="fl">Case Owner — DM/AM <span class="exist-badge">(Case Owner)</span></span><span class="fv edit"><select><option>Sarah Tan (DM)</option><option>Michael Lee (AM)</option></select></span></div>
+      <div class="fi"><span class="fl">Opportunity Owner — AE/AM <span class="exist-badge">(AM Owner field)</span></span><span class="fv edit"><select><option>John Doe (AE) — reassign to AM on go-live</option><option>Sarah Tan (AM)</option></select></span></div>
+      <div class="fi">
+        <span class="fl">DM Complexity Score <span class="new-badge">★ NEW · Complexity_score</span></span>
+        <span class="fv edit" style="display:flex;align-items:center;gap:6px">
+          <input type="number" min="1" max="100" placeholder="e.g. 75" style="width:60px">
+          <span style="color:#706e6b;font-size:11px">/ 100</span>
+        </span>
+      </div>
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <div class="fi"><span class="fl">Product Scope <span class="exist-badge">(Solution Scope)</span></span><span class="fv edit"><input type="text" placeholder="e.g. FX, Collections, Cards"></span></div>
+      <div class="fi"><span class="fl">Forecast Go-Live Date <span class="exist-badge">(MS Forecast Date)</span></span><span class="fv edit"><input type="date" style="color:#181818"></span></div>
+      <div class="fi"><span class="fl">Forecast Confidence</span><span class="fv edit"><select onchange="colorConf(this)"><option value="">— Select —</option><option value="high">🟢 High</option><option value="med">🟡 Medium</option><option value="low">🔴 Low</option></select></span></div>
+    </div>
+    <div class="fg" style="margin-bottom:0">
+      <div class="fi s3"><span class="fl">Requirements Description <span class="exist-badge">(Requirements Descriptions)</span></span><span class="fv"><textarea rows="3" placeholder="Describe key project requirements, scope, and client context..."></textarea></span></div>
+      <div class="fi s2"><span class="fl">Delivery Materials Link <span class="new-badge">★ NEW · Delivery_Materials_Folder</span></span><span class="fv edit link"><input type="url" placeholder="https://drive.google.com/drive/folders/..."></span></div>
+      <div class="fi"><span class="fl">Slack Channel Link <span class="exist-badge">(Slack Channel)</span></span><span class="fv edit link"><input type="url" placeholder="https://app.slack.com/..."></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 3 · MILESTONES ══ -->
+<div class="sec-bar">
+  <div class="sec-num">3</div>
+  <span class="sec-title">Milestones</span>
+  <span class="sec-sub">Progress banner · readiness gates at trigger milestones</span>
+</div>
+<div class="ms-banner">
+  <div class="ms-header">
+    <h2>Delivery Milestone Progress</h2>
+    <span class="cur" id="ms-cur-label">Current: M2 — Kickoff Complete</span>
+  </div>
+  <div class="ms-body">
+    <div class="ms-track">
+      <div class="ms-line"><div class="ms-fill" id="ms-fill" style="width:14%"></div></div>
+
+      <!-- M1 -->
+      <div class="ms-node done" data-m="1">
+        <div class="ms-dot done">✓</div>
+        <div class="ms-label">
+          <div class="ms-num">M1</div>
+          <div class="ms-name">Handover Complete</div>
+          <div class="ms-desc">AE/SE handoff, delivery ownership accepted</div>
+        </div>
+      </div>
+
+      <!-- M2 -->
+      <div class="ms-node active" data-m="2">
+        <div class="ms-dot active">●</div>
+        <div class="ms-label">
+          <div class="ms-num">M2</div>
+          <div class="ms-name">Kickoff Complete</div>
+          <div class="ms-desc">First intro with customer</div>
+        </div>
+      </div>
+
+      <!-- M3 -->
+      <div class="ms-node" data-m="3" style="flex:1.2">
+        <div class="ms-dot">3</div>
+        <div class="ms-label">
+          <div class="ms-num">M3</div>
+          <div class="ms-name">Scope Signoff</div>
+          <div class="ms-desc">Products, regions, dependencies aligned</div>
+        </div>
+        <div class="ms-tags">
+          <span class="rtag comm" onclick="scrollToId('r-comm')">▲ Commercial Readiness</span>
+          <span class="rtag tech" onclick="scrollToId('r-techp')">▲ Technical Readiness (Planning)</span>
+        </div>
+      </div>
+
+      <!-- M4 -->
+      <div class="ms-node" data-m="4">
+        <div class="ms-dot">4</div>
+        <div class="ms-label">
+          <div class="ms-num">M4</div>
+          <div class="ms-name">Build / Config Complete</div>
+          <div class="ms-desc">Customer integration + config complete</div>
+        </div>
+      </div>
+
+      <!-- M5 -->
+      <div class="ms-node" data-m="5" style="flex:1.2">
+        <div class="ms-dot">5</div>
+        <div class="ms-label">
+          <div class="ms-num">M5</div>
+          <div class="ms-name">Testing Complete</div>
+          <div class="ms-desc">Demo validation complete</div>
+        </div>
+        <div class="ms-tags">
+          <span class="rtag prod" onclick="scrollToId('r-prod')">▲ Product Readiness</span>
+          <span class="rtag tech" onclick="scrollToId('r-teche')">▲ Technical Readiness (Execution)</span>
+        </div>
+      </div>
+
+      <!-- M6 -->
+      <div class="ms-node" data-m="6" style="flex:1.3">
+        <div class="ms-dot">6</div>
+        <div class="ms-label">
+          <div class="ms-num">M6</div>
+          <div class="ms-name">Launch Ready</div>
+          <div class="ms-desc">Readiness gates complete, onboarding ready</div>
+        </div>
+        <div class="ms-tags">
+          <span class="rtag ops" onclick="scrollToId('r-ops')">▲ Operational Readiness</span>
+          <span class="rtag cust" onclick="scrollToId('r-cust')">▲ Customer Readiness</span>
+          <span class="golive-tag">▲ GO-LIVE</span>
+        </div>
+      </div>
+
+      <!-- M7 -->
+      <div class="ms-node" data-m="7">
+        <div class="ms-dot">7</div>
+        <div class="ms-label">
+          <div class="ms-num">M7</div>
+          <div class="ms-name">Volume Ramping Up</div>
+          <div class="ms-desc">Transaction scaling</div>
+        </div>
+      </div>
+
+      <!-- M8 -->
+      <div class="ms-node" data-m="8">
+        <div class="ms-dot">8</div>
+        <div class="ms-label">
+          <div class="ms-num">M8</div>
+          <div class="ms-name">Stabilization</div>
+          <div class="ms-desc">Post-launch monitoring done</div>
+        </div>
+      </div>
+
+      <!-- M9 -->
+      <div class="ms-node" data-m="9" style="flex:1.1">
+        <div class="ms-dot">9</div>
+        <div class="ms-label">
+          <div class="ms-num">M9</div>
+          <div class="ms-name">Roll Off</div>
+          <div class="ms-desc">Delivery ownership transitioned</div>
+        </div>
+        <div class="ms-tags">
+          <span class="rtag bau" onclick="scrollToId('r-bau')">▲ BAU Readiness</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 4 · READINESS & RISKS ══ -->
+<div class="sec-bar">
+  <div class="sec-num">4</div>
+  <span class="sec-title">Readiness &amp; Risks</span>
+  <span class="sec-sub">7 readiness areas · milestone-gated</span>
+</div>
+
+<!-- 4.1 Overview -->
+<div class="card">
+  <div class="card-header"><h2>4.1 Readiness Overview</h2><span class="sub">Formula: X of 6 pre-go-live areas complete</span></div>
+  <div class="card-body">
+    <div class="r-overview">
+      <div class="r-card" id="oc-card-comm" onclick="scrollToId('r-comm')">
+        <div class="oc-emoji" id="oc-emoji-comm">🟡</div>
+        <h4>Commercial Readiness</h4>
+        <div class="oc-prog" id="oc-prog-comm">3 / 5 items</div>
+        <div class="oc-state" id="oc-state-comm" style="color:#b8860b">IN PROGRESS</div>
+      </div>
+      <div class="r-card dim" id="oc-card-techp" onclick="scrollToId('r-techp')">
+        <div class="oc-emoji" id="oc-emoji-techp">⚫</div>
+        <h4>Technical Planning</h4>
+        <div class="oc-prog" id="oc-prog-techp">0 / 6 items</div>
+        <div class="oc-state" id="oc-state-techp" style="color:#706e6b">NOT STARTED</div>
+      </div>
+      <div class="r-card dim" id="oc-card-prod" onclick="scrollToId('r-prod')">
+        <div class="oc-emoji" id="oc-emoji-prod">⚫</div>
+        <h4>Product Readiness</h4>
+        <div class="oc-prog" id="oc-prog-prod">0 / 3 items</div>
+        <div class="oc-state" id="oc-state-prod" style="color:#706e6b">NOT STARTED</div>
+      </div>
+      <div class="r-card dim" id="oc-card-teche" onclick="scrollToId('r-teche')">
+        <div class="oc-emoji" id="oc-emoji-teche">⚫</div>
+        <h4>Technical Execution</h4>
+        <div class="oc-prog" id="oc-prog-teche">0 / 4 items</div>
+        <div class="oc-state" id="oc-state-teche" style="color:#706e6b">NOT STARTED</div>
+      </div>
+      <div class="r-card dim" id="oc-card-ops" onclick="scrollToId('r-ops')">
+        <div class="oc-emoji" id="oc-emoji-ops">⚫</div>
+        <h4>Operational Readiness</h4>
+        <div class="oc-prog" id="oc-prog-ops">0 / 5 items</div>
+        <div class="oc-state" id="oc-state-ops" style="color:#706e6b">NOT STARTED</div>
+      </div>
+      <div class="r-card dim" id="oc-card-cust" onclick="scrollToId('r-cust')">
+        <div class="oc-emoji" id="oc-emoji-cust">⚫</div>
+        <h4>Customer Readiness</h4>
+        <div class="oc-prog" id="oc-prog-cust">0 / 5 items</div>
+        <div class="oc-state" id="oc-state-cust" style="color:#706e6b">NOT STARTED</div>
+      </div>
+    </div>
+    <div class="overall-bar" id="overall-bar">
+      <div>
+        <h3>Overall Pre–Go-Live Readiness</h3>
+        <div class="note">Formula-driven: count of 6 areas where all items are Complete</div>
+      </div>
+      <div class="overall-count" id="overall-count"><span id="overall-num">0</span> <span class="sub">/ 6 areas complete</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0 2px">
+      <span style="font-size:11px;font-weight:700;color:#706e6b;text-transform:uppercase;letter-spacing:.3px">BAU Readiness</span>
+      <span style="font-size:9px;background:#fce7e7;color:#a8001c;padding:2px 6px;border-radius:6px;font-weight:700">Post Go-Live · M9</span>
+      <div id="oc-card-bau" onclick="scrollToId('r-bau')" style="display:inline-flex;align-items:center;gap:10px;padding:6px 14px;cursor:pointer;background:#fff;border:1px solid #dddbda;border-left:3px solid #ba0517;border-radius:3px;transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 2px 6px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
+        <span id="oc-emoji-bau" style="font-size:16px">⚫</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#181818">BAU Readiness</div>
+          <div id="oc-prog-bau" style="font-size:10px;color:#706e6b">0 / 4 items · tracked separately</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.2 Status Legend -->
+<div class="legend-card">
+  <h3>4.2 Status Definitions</h3>
+  <div class="legend-grid">
+    <div class="lg-item"><span class="sbadge s-green">🟢 Green</span><div class="lg-text"><h4>No material risk</h4><p>Dependencies progressing normally</p><em>blocker &lt;7 days, forecast stable</em></div></div>
+    <div class="lg-item"><span class="sbadge s-yellow">🟡 Yellow</span><div class="lg-text"><h4>Risk, date still achievable</h4><p>Needs intervention or monitoring</p><em>waiting on product 5–10 days</em></div></div>
+    <div class="lg-item"><span class="sbadge s-red">🔴 Red</span><div class="lg-text"><h4>Blockers impacting launch</h4><p>Immediate intervention required</p><em>readiness blocked, unresponsive 2 wks</em></div></div>
+    <div class="lg-item"><span class="sbadge s-ns">⚫ Not Started</span><div class="lg-text"><h4>Not yet evaluated</h4><p>Readiness area not yet started</p><em>kickoff not completed</em></div></div>
+    <div class="lg-item"><span class="sbadge s-na">N/A</span><div class="lg-text"><h4>Not applicable</h4><p>Area does not apply to this project</p><em>no technical integration required</em></div></div>
+    <div class="lg-item"><span class="sbadge s-done">✓ Complete</span><div class="lg-text"><h4>Item completed</h4><p>All deliverables checked off</p><em>—</em></div></div>
+  </div>
+</div>
+
+<!-- ── COMMERCIAL READINESS ── -->
+<div id="r-comm" class="rs-wrap">
+  <div class="rs-vtab v-comm" onclick="toggleRS('comm')">Commercial Readiness</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('comm')">
+      <span class="ms-badge">▲ M3</span>
+      <span class="desc">Do we know what we are delivering and commercial ownership is clear?</span>
+      <div class="rs-right">
+        <span class="sbadge s-yellow" id="badge-comm">🟡 3 / 5 done</span>
+        <span class="toggle" id="icon-comm">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-comm">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">Contract Signed</div></td><td><div class="idesc">Signed MSA and stored</div></td><td><div class="idesc">MSA / agreement finalized</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Product Scope Confirmed</div></td><td><div class="idesc">Documents signed off by client on products to be delivered</div></td><td><div class="idesc">Signed off with client on what product to be delivered</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>🟡 Yellow</option><option>✓ Complete</option><option>🟢 Green</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Pricing Confirmed</div></td><td><div class="idesc">External pricing meeting done and aligned</div></td><td><div class="idesc">pricing / commercials aligned</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Handoff Completed</div></td><td><div class="idesc">Handoff sheet + recordings</div></td><td><div class="idesc">AE / AM / DM ownership aligned</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Commercial Dependencies Identified</div><div class="idesc" style="font-style:italic;color:#b0adab">If applicable</div></td><td><div class="idesc">Log any dependencies in tracker</div></td><td><div class="idesc">commercial blockers known</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── TECHNICAL PLANNING ── -->
+<div id="r-techp" class="rs-wrap">
+  <div class="rs-vtab v-techp" onclick="toggleRS('techp')">Technical Planning</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('techp')">
+      <span class="ms-badge">▲ M3</span>
+      <span class="desc">Can customers technically start implementing?</span>
+      <div class="rs-right">
+        <span class="sbadge s-ns" id="badge-techp">⚫ 0 / 6 done</span>
+        <span class="toggle" id="icon-techp">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-techp">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">Fund Flow Confirmed</div></td><td><div class="idesc">Fund flow aligned with client</div></td><td><div class="idesc">E2E transaction flow aligned</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Integration Scope Confirmed</div></td><td><div class="idesc">Integration guide shared with client</div></td><td><div class="idesc">APIs / components defined</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Integration Roadmap Confirmed</div></td><td><div class="idesc">Build roadmap aligned with client</div></td><td><div class="idesc">Roadmap and timeline aligned</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer Technical Ready</div></td><td><div class="idesc">Customer technical owner assigned, implementation plan confirmed</div></td><td><div class="idesc">Customer confirmed no technical build limitations</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Credentials / Access Ready</div></td><td><div class="idesc">Sandbox account, API credentials and documents shared</div></td><td><div class="idesc">sandbox / credentials available</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Technical Dependencies Identified</div><div class="idesc" style="font-style:italic;color:#b0adab">If applicable</div></td><td><div class="idesc">Log any dependencies in tracker</div></td><td><div class="idesc">Technical blockers known</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRODUCT READINESS ── -->
+<div id="r-prod" class="rs-wrap">
+  <div class="rs-vtab v-prod" onclick="toggleRS('prod')">Product Readiness</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('prod')">
+      <span class="ms-badge">▲ M5</span>
+      <span class="desc">Can required products actually support launch?</span>
+      <div class="rs-right">
+        <span class="sbadge s-ns" id="badge-prod">⚫ 0 / 3 done</span>
+        <span class="toggle" id="icon-prod">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-prod">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">Product Availability Confirmed</div></td><td><div class="idesc">Products to be delivered confirmed</div></td><td><div class="idesc">region / entity support verified</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Required Features Available</div></td><td><div class="idesc">Feature availability assessment completed</div></td><td><div class="idesc">All required capabilities available or workaround agreed</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Product Risks Managed</div></td><td><div class="idesc">Product gap risk log reviewed and agreed</div></td><td><div class="idesc">Roadmap gaps, limitations and escalations documented (GSE)</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── TECHNICAL EXECUTION ── -->
+<div id="r-teche" class="rs-wrap">
+  <div class="rs-vtab v-teche" onclick="toggleRS('teche')">Technical Execution</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('teche')">
+      <span class="ms-badge">▲ M5</span>
+      <span class="desc">Are customers technically ready to go-live?</span>
+      <div class="rs-right">
+        <span class="sbadge s-ns" id="badge-teche">⚫ 0 / 4 done</span>
+        <span class="toggle" id="icon-teche">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-teche">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">Build Complete</div></td><td><div class="idesc">Client build completed</div></td><td><div class="idesc">Client completes the build</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Demo Testing Finished</div></td><td><div class="idesc">Demo test results approved</div></td><td><div class="idesc">Pass demo testing</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Production Access Ready</div></td><td><div class="idesc">Production credentials issued and validated</div></td><td><div class="idesc">credentials available</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Environment Ready</div></td><td><div class="idesc">Production environment configuration completed</div></td><td><div class="idesc">production env ready</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── OPERATIONAL READINESS ── -->
+<div id="r-ops" class="rs-wrap">
+  <div class="rs-vtab v-ops" onclick="toggleRS('ops')">Operational Readiness</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('ops')">
+      <span class="ms-badge">▲ M6</span>
+      <span class="desc">Can operations support production?</span>
+      <div class="rs-right">
+        <span class="sbadge s-ns" id="badge-ops">⚫ 0 / 5 done</span>
+        <span class="toggle" id="icon-ops">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-ops">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">KYC/KYB Capacity Confirmed</div></td><td><div class="idesc">Onboarding capacity approval confirmed with Ops team</div></td><td><div class="idesc">onboarding approval done</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Onboarding Roadmap Aligned</div></td><td><div class="idesc">Agreed onboarding plan + target volume ramp up timeline</div></td><td><div class="idesc">Client aligned with onboarding plan</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Pricing Config &amp; Admins Complete</div></td><td><div class="idesc">Pricing config done by CE team / forms submitted</div></td><td><div class="idesc">configs done</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Internal Approvals Complete</div></td><td><div class="idesc">Required approvals documented (risks, compliance, product)</div></td><td><div class="idesc">approvals completed</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Support Model Aligned</div></td><td><div class="idesc">Support model prepared and shared with client</div></td><td><div class="idesc">POC ready and escalation path ready</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── CUSTOMER READINESS ── -->
+<div id="r-cust" class="rs-wrap">
+  <div class="rs-vtab v-cust" onclick="toggleRS('cust')">Customer Readiness</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('cust')">
+      <span class="ms-badge">▲ M6</span>
+      <span class="desc">Is customer capable of executing?</span>
+      <div class="rs-right">
+        <span class="sbadge s-ns" id="badge-cust">⚫ 0 / 5 done</span>
+        <span class="toggle" id="icon-cust">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-cust">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">Customer PM Assigned</div></td><td><div class="idesc">Customer project team assigned, ready to take over / co-lead onboarding</div></td><td><div class="idesc">owner onboarding POC exists</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Required Resources Available</div></td><td><div class="idesc">Customer resource commitment confirmed</div></td><td><div class="idesc">staffing ready</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Client Training Completed</div></td><td><div class="idesc">Training complete / recording shared</div></td><td><div class="idesc">onboarding complete</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer Dependencies Tracked</div></td><td><div class="idesc">Customer dependency tracker reviewed and agreed</div></td><td><div class="idesc">dependencies visible</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer Timelines Confirmed</div></td><td><div class="idesc">Agreed onboarding plan timeline / target volume ramp up</div></td><td><div class="idesc">commitment aligned</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── BAU READINESS ── -->
+<div id="r-bau" class="rs-wrap">
+  <div class="rs-vtab v-bau" onclick="toggleRS('bau')">BAU Readiness</div>
+  <div class="rs-inner">
+    <div class="rs-header" onclick="toggleRS('bau')">
+      <span class="ms-badge">▲ M9 · Post Go-Live</span>
+      <span class="desc">Is DM ready to hand off to AM?</span>
+      <div class="rs-right">
+        <span class="sbadge s-ns" id="badge-bau">⚫ 0 / 4 done</span>
+        <span class="toggle" id="icon-bau">▼</span>
+      </div>
+    </div>
+    <div class="rs-table-wrap" id="body-bau">
+      <table class="rt">
+        <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
+        <tbody>
+          <tr><td><div class="iname">Operational Stability</div></td><td><div class="idesc">Stabilization review completed / no critical open issues</div></td><td><div class="idesc">No critical open issues · escalation volume normalized</div></td><td><select class="ss" data-sec="bau" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Knowledge Transfer Complete</div></td><td><div class="idesc">Handoff package shared</div></td><td><div class="idesc">Handoff session complete · key recording shared · issue tracking shared</div></td><td><select class="ss" data-sec="bau" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Ownership Acceptance</div></td><td><div class="idesc">AM ownership acknowledgement completed</div></td><td><div class="idesc">AM confirms readiness</div></td><td><select class="ss" data-sec="bau" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer Readiness for BAU</div></td><td><div class="idesc">Customer celebration deck completed</div></td><td><div class="idesc">Regular operating cadence established · support channels known · customer training complete</div></td><td><select class="ss" data-sec="bau" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 5 ══ -->
+<div class="divider"></div>
+<div class="sec-bar">
+  <div class="sec-num">5</div>
+  <span class="sec-title">Post Delivery Review</span>
+  <span class="sec-sub">Subjective engagement outcome scores</span>
+</div>
+<div class="rating-grid">
+  <div class="r-score-card">
+    <h3>Scope Success</h3>
+    <div class="rdesc">Rate 1–5: how well was the agreed scope delivered against commitments?</div>
+    <div class="star-row" id="scope-stars">
+      <div class="star" onclick="setRating('scope',1)">1</div><div class="star" onclick="setRating('scope',2)">2</div><div class="star" onclick="setRating('scope',3)">3</div><div class="star" onclick="setRating('scope',4)">4</div><div class="star" onclick="setRating('scope',5)">5</div>
+    </div>
+    <div class="rscale"><span>5</span> = exceeded agreed scope &nbsp;·&nbsp; <span>4</span> = delivered successfully &nbsp;·&nbsp; <span>1–3</span> = below expectations</div>
+  </div>
+  <div class="r-score-card">
+    <h3>Growth Success</h3>
+    <div class="rdesc">Rate 1–5: what is the growth outcome of this engagement?</div>
+    <div class="star-row" id="growth-stars">
+      <div class="star" onclick="setRating('growth',1)">1</div><div class="star" onclick="setRating('growth',2)">2</div><div class="star" onclick="setRating('growth',3)">3</div><div class="star" onclick="setRating('growth',4)">4</div><div class="star" onclick="setRating('growth',5)">5</div>
+    </div>
+    <div class="rscale"><span>5</span> = expanded into additional workstreams &nbsp;·&nbsp; <span>1</span> = client offboarding &nbsp;·&nbsp; <span>2–4</span> = varying growth potential</div>
+  </div>
+</div>
+
+<!-- ══ APPENDIX ══ -->
+<div class="divider"></div>
+<div class="sec-bar">
+  <div class="sec-num gray">A</div>
+  <span class="sec-title">Weekly Update</span>
+  <span class="sec-sub" style="display:flex;gap:6px;align-items:center">
+    <span style="font-size:9px;background:#c9f0ff;color:#0176d3;padding:2px 6px;border-radius:3px;font-weight:700">DM INPUT ONLY</span>
+    <span style="font-size:11px;color:#706e6b">All other fields formula-driven</span>
+  </span>
+</div>
+<div class="card">
+  <div class="card-header"><h2>Weekly DM Update</h2><span class="sub">Last updated: <span id="wu-date">—</span></span></div>
+  <div class="card-body">
+    <div class="wu-grid">
+      <div class="wu-field"><div class="wl">Current Milestone <span class="dm-b">DM</span></div><div class="wv"><select style="border:none;background:transparent;font-size:12px;outline:none;cursor:pointer;width:100%;color:#181818"><option>M1 — Handover Complete</option><option selected>M2 — Kickoff Complete</option><option>M3 — Scope Signoff</option><option>M4 — Build / Config Complete</option><option>M5 — Testing Complete</option><option>M6 — Launch Ready</option><option>M7 — Volume Ramping Up</option><option>M8 — Stabilization</option><option>M9 — Roll Off</option></select></div></div>
+      <div class="wu-field"><div class="wl">Forecast Date <span class="fm-b">formula</span></div><div class="wv formula">↳ From Project Info: Forecast Go-Live Date</div></div>
+      <div class="wu-field"><div class="wl">Forecast Confidence <span class="dm-b">DM</span></div><div class="wv"><select style="border:none;background:transparent;font-size:12px;outline:none;cursor:pointer;width:100%;color:#181818"><option>— Select —</option><option>🟢 High</option><option>🟡 Medium</option><option>🔴 Low</option></select></div></div>
+      <div class="wu-field"><div class="wl">Readiness Status <span class="fm-b">formula</span></div><div class="wv formula" id="wu-readiness">↳ From Section 4: 0 / 6 areas complete</div></div>
+      <div class="wu-field s2"><div class="wl">Current Blocker <span class="dm-b">DM</span></div><div class="wv"><input type="text" placeholder="Describe the most critical current blocker..."></div></div>
+      <div class="wu-field"><div class="wl">Dependency Owner <span class="dm-b">DM</span></div><div class="wv"><input type="text" placeholder="Name / role of blocker owner..."></div></div>
+      <div class="wu-field"><div class="wl">Waiting On Team <span class="dm-b">DM</span></div><div class="wv"><select style="border:none;background:transparent;font-size:12px;outline:none;cursor:pointer;width:100%;color:#181818"><option value="">— Select team —</option><option>Customer</option><option>Product</option><option>Legal</option><option>Risk</option><option>Compliance</option><option>SE</option><option>CE</option><option>Case team</option><option>Other — please specify</option></select></div></div>
+    </div>
+  </div>
+</div>
+<div style="height:48px"></div>
+</div>
+
+<script>
+const WO = `<option value="">—</option><option>Customer</option><option>Product</option><option>Legal</option><option>Risk</option><option>Compliance</option><option>SE</option><option>CE</option><option>Case team</option><option>Other — please specify</option>`;
+document.querySelectorAll('select.ws').forEach(s => { s.innerHTML = WO; });
+
+const SECS = [
+  { id:'comm',  total:5, pre:true  },
+  { id:'techp', total:6, pre:true  },
+  { id:'prod',  total:3, pre:true  },
+  { id:'teche', total:4, pre:true  },
+  { id:'ops',   total:5, pre:true  },
+  { id:'cust',  total:5, pre:true  },
+  { id:'bau',   total:4, pre:false },
+];
+
+function colorSS(sel) {
+  const v = sel.value;
+  if (v.includes('Complete'))    { sel.style.color='#0a6042'; sel.style.background='#f2fdf5'; }
+  else if (v.includes('Green'))  { sel.style.color='#0a6042'; sel.style.background='#f2fdf5'; }
+  else if (v.includes('Yellow')) { sel.style.color='#6b4800'; sel.style.background='#fffbec'; }
+  else if (v.includes('Red'))    { sel.style.color='#a8001c'; sel.style.background='#fff5f5'; }
+  else if (v==='N/A')            { sel.style.color='#706e6b'; sel.style.background='#fafaf9'; }
+  else                           { sel.style.color='#706e6b'; sel.style.background='#fff';    }
+}
+
+function highlightRow(sel) {
+  const row = sel.closest('tr');
+  if (!row) return;
+  row.style.background = sel.value.includes('Complete') ? '#f8fdf9' : sel.value==='N/A' ? '#fafaf9' : '';
+  row.style.opacity = sel.value==='N/A' ? '0.6' : '1';
+}
+
+function recalc() {
+  let preComplete = 0;
+  SECS.forEach(sec => {
+    const sels = Array.from(document.querySelectorAll(`#body-${sec.id} select.ss`));
+    let done=0, red=0, yellow=0, green=0, na=0;
+    sels.forEach(s => {
+      const v = s.value;
+      if (v.includes('Complete'))    done++;
+      else if (v.includes('Red'))    red++;
+      else if (v.includes('Yellow')) yellow++;
+      else if (v.includes('Green'))  green++;
+      else if (v==='N/A')            na++;
+    });
+    const total = sels.length;
+    const allResolved = (done+na)===total && total>0;
+
+    let emoji, cls, badgeText, stateText, stateColor;
+    if (allResolved)       { emoji='✅'; cls='s-done';   badgeText=`✓ ${done}/${sec.total} done`; stateText='COMPLETE';     stateColor='#0a6042'; }
+    else if (red>0)        { emoji='🔴'; cls='s-red';    badgeText=`🔴 ${done}/${sec.total} done`; stateText='BLOCKED';     stateColor='#a8001c'; }
+    else if (yellow>0)     { emoji='🟡'; cls='s-yellow'; badgeText=`🟡 ${done}/${sec.total} done`; stateText='AT RISK';     stateColor='#b8860b'; }
+    else if (green||done)  { emoji='🟢'; cls='s-green';  badgeText=`🟢 ${done}/${sec.total} done`; stateText='IN PROGRESS'; stateColor='#2e7d32'; }
+    else                   { emoji='⚫'; cls='s-ns';     badgeText=`⚫ ${done}/${sec.total} done`; stateText='NOT STARTED'; stateColor='#706e6b'; }
+
+    const badge = document.getElementById('badge-'+sec.id);
+    if (badge) { badge.className='sbadge '+cls; badge.textContent=badgeText; }
+
+    if (sec.pre) {
+      const e=document.getElementById('oc-emoji-'+sec.id);
+      const p=document.getElementById('oc-prog-'+sec.id);
+      const st=document.getElementById('oc-state-'+sec.id);
+      const c=document.getElementById('oc-card-'+sec.id);
+      if (e)  e.textContent = emoji;
+      if (p)  p.textContent = `${done} / ${sec.total} items`;
+      if (st) { st.textContent=stateText; st.style.color=stateColor; }
+      if (c)  { c.classList.toggle('dim', done===0&&na===0); c.classList.toggle('complete', allResolved); }
+      if (allResolved) preComplete++;
+    } else {
+      const be=document.getElementById('oc-emoji-bau');
+      const bp=document.getElementById('oc-prog-bau');
+      if (be) be.textContent=emoji;
+      if (bp) bp.textContent=`${done} / ${sec.total} items · tracked separately`;
+    }
+  });
+
+  const numEl=document.getElementById('overall-num');
+  const cntEl=document.getElementById('overall-count');
+  const barEl=document.getElementById('overall-bar');
+  const wuEl=document.getElementById('wu-readiness');
+  if (numEl) numEl.textContent=preComplete;
+  if (cntEl) cntEl.classList.toggle('done', preComplete===6);
+  if (barEl) barEl.classList.toggle('all-done', preComplete===6);
+  if (wuEl)  wuEl.textContent=`↳ From Section 4: ${preComplete} / 6 areas complete`;
+
+  updateMilestoneGates();
+}
+
+function onStatusChange(sel) { colorSS(sel); highlightRow(sel); recalc(); }
+function colorConf(sel) { sel.style.color={high:'#0a6042',med:'#6b4800',low:'#a8001c'}[sel.value]||'#181818'; }
+
+function toggleRS(id) {
+  const body=document.getElementById('body-'+id);
+  const icon=document.getElementById('icon-'+id);
+  const open=body.style.display!=='none';
+  body.style.display=open?'none':'';
+  icon.textContent=open?'▶':'▼';
+}
+
+function setRating(type, val) {
+  document.querySelectorAll(`#${type}-stars .star`).forEach((s,i)=>s.classList.toggle('on',i<val));
+}
+
+document.querySelectorAll('.ms-node').forEach(node=>{
+  node.querySelector('.ms-dot').addEventListener('click',()=>{
+    const m=parseInt(node.dataset.m);
+    document.querySelectorAll('.ms-node').forEach(n=>{
+      const nm=parseInt(n.dataset.m), dot=n.querySelector('.ms-dot');
+      n.classList.remove('done','active');
+      dot.classList.remove('done','active');
+      if (nm<m)       { n.classList.add('done');   dot.className='ms-dot done';   dot.textContent='✓'; }
+      else if (nm===m){ n.classList.add('active'); dot.className='ms-dot active'; dot.textContent='●'; }
+      else            {                             dot.className='ms-dot';        dot.textContent=nm;  }
+    });
+    document.getElementById('ms-fill').style.width=((m-1)/8*100).toFixed(0)+'%';
+    document.getElementById('ms-cur-label').textContent=`Current: M${m}`;
+  });
+});
+
+function scrollToId(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+document.getElementById('wu-date').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+document.querySelectorAll('select.ss').forEach(colorSS);
+
+// ── Milestone gate auto-complete ─────────────────────────────────────────────
+const GATES = {
+  3: ['comm', 'techp'],   // M3: Commercial Readiness + Technical Planning
+  5: ['prod', 'teche'],   // M5: Product Readiness + Technical Execution
+  6: ['ops',  'cust'],    // M6: Operational Readiness + Customer Readiness
+  9: ['bau'],             // M9: BAU Readiness
+};
+
+recalc();
+
+function isSectionComplete(id) {
+  const sels = [...document.querySelectorAll(`#body-${id} select.ss`)];
+  return sels.length > 0 && sels.every(s => s.value.includes('Complete') || s.value === 'N/A');
+}
+
+function updateMilestoneGates() {
+  // Which gated milestones have all their gates complete?
+  const gateDone = {};
+  Object.entries(GATES).forEach(([m, secs]) => {
+    gateDone[parseInt(m)] = secs.every(isSectionComplete);
+  });
+
+  // Highest milestone whose gate is satisfied (and all prior gated ones too, sequentially)
+  // We treat it as sequential: M5 can't auto-complete unless M3 is also done
+  const gateOrder = [3, 5, 6, 9];
+  let maxAutoDone = 0;
+  for (const m of gateOrder) {
+    if (gateDone[m]) maxAutoDone = m;
+    else break; // stop at first incomplete gate (keep sequential)
+  }
+
+  const nodes = [...document.querySelectorAll('.ms-node')];
+
+  nodes.forEach(node => {
+    const m = parseInt(node.dataset.m);
+    const dot = node.querySelector('.ms-dot');
+
+    if (maxAutoDone > 0 && m <= maxAutoDone) {
+      // Auto-mark done
+      if (!node.classList.contains('done')) {
+        node.classList.add('done');
+        node.classList.remove('active');
+        dot.className = 'ms-dot done ding';
+        dot.textContent = '✓';
+        setTimeout(() => dot.classList.remove('ding'), 600);
+      }
+    } else if (maxAutoDone > 0 && m === maxAutoDone + 1) {
+      // Advance "current" to the next milestone after the highest auto-done
+      if (!node.classList.contains('done')) {
+        node.classList.add('active');
+        node.classList.remove('done');
+        dot.className = 'ms-dot active';
+        dot.textContent = '●';
+      }
+    } else if (maxAutoDone > 0 && m > maxAutoDone + 1) {
+      // Ensure remaining are not incorrectly marked
+      if (!node.classList.contains('done') && !node.classList.contains('active')) {
+        dot.className = 'ms-dot';
+        dot.textContent = m;
+      }
+    }
+  });
+
+  if (maxAutoDone > 0) {
+    const fillPct = ((maxAutoDone - 1) / 8 * 100).toFixed(0);
+    document.getElementById('ms-fill').style.width = fillPct + '%';
+    const curM = maxAutoDone < 9 ? maxAutoDone + 1 : 9;
+    const nameEl = document.querySelector(`.ms-node[data-m="${curM}"] .ms-name`);
+    const name = nameEl ? nameEl.textContent : '';
+    document.getElementById('ms-cur-label').textContent =
+      maxAutoDone === 9 ? 'M9 — Roll Off Complete' : `Current: M${curM} — ${name}`;
+  }
+}
+
+// ── Deliverable link injection ────────────────────────────────────────────────
+document.querySelectorAll('table.rt tbody tr').forEach(row => {
+  const cell = row.querySelectorAll('td')[1];
+  if (!cell) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'del-wrap';
+  wrap.innerHTML = `<span class="del-link">📎 insert link</span><input class="del-input" type="url" placeholder="Paste Google Drive or doc URL…">`;
+  cell.appendChild(wrap);
+
+  const link = wrap.querySelector('.del-link');
+  const input = wrap.querySelector('.del-input');
+
+  link.addEventListener('click', e => {
+    if (wrap.classList.contains('linked')) return;
+    e.stopPropagation();
+    link.style.display = 'none';
+    input.style.display = 'block';
+    input.focus();
+  });
+
+  function commitLink() {
+    const url = input.value.trim();
+    input.style.display = 'none';
+    link.style.display = '';
+    if (url) {
+      wrap.classList.add('linked');
+      link.innerHTML = `📎 <a class="del-doc-link" href="${url}" target="_blank" rel="noopener">View doc</a><span class="del-clear" title="Remove link"> ✕</span>`;
+      link.querySelector('.del-clear').addEventListener('click', e => {
+        e.stopPropagation();
+        wrap.classList.remove('linked');
+        input.value = '';
+        link.textContent = '📎 insert link';
+      });
+    } else {
+      link.textContent = '📎 insert link';
+    }
+  }
+
+  input.addEventListener('blur', commitLink);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commitLink(); } if (e.key === 'Escape') { input.value=''; commitLink(); } });
+});
+</script>
+</body>
+</html>
