@@ -186,9 +186,6 @@ table.rt tr:hover td{background:#fafaf9}
 .rscale span{font-weight:700;color:#181818}
 
 /* ── WEEKLY UPDATE ── */
-.wu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.wu-field{background:#f3f2f2;border:1px solid #dddbda;border-radius:4px;padding:10px 12px}
-.wu-field.s2{grid-column:span 2}
 .wl{font-size:9px;font-weight:700;text-transform:uppercase;color:#706e6b;margin-bottom:4px;display:flex;align-items:center;gap:5px}
 .wl .dm-b{font-size:8px;background:#c9f0ff;color:#0176d3;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:none}
 .wl .fm-b{font-size:8px;background:#d4f5e0;color:#04844b;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:none}
@@ -242,7 +239,6 @@ table.rt tr:hover td{background:#fafaf9}
     <div class="page-actions">
       <button class="btn">Edit</button>
       <button class="btn">Clone</button>
-      <button class="btn btn-primary">+ Weekly Update</button>
     </div>
   </div>
 </div>
@@ -728,30 +724,6 @@ table.rt tr:hover td{background:#fafaf9}
   </div>
 </div>
 
-<!-- ══ APPENDIX ══ -->
-<div class="divider"></div>
-<div class="sec-bar">
-  <div class="sec-num gray">A</div>
-  <span class="sec-title">Weekly Update</span>
-  <span class="sec-sub" style="display:flex;gap:6px;align-items:center">
-    <span style="font-size:9px;background:#c9f0ff;color:#0176d3;padding:2px 6px;border-radius:3px;font-weight:700">DM INPUT ONLY</span>
-    <span style="font-size:11px;color:#706e6b">All other fields formula-driven</span>
-  </span>
-</div>
-<div class="card">
-  <div class="card-header"><h2>Weekly DM Update</h2><span class="sub">Last updated: <span id="wu-date">—</span></span></div>
-  <div class="card-body">
-    <div class="wu-grid">
-      <div class="wu-field"><div class="wl">Current Milestone <span class="dm-b">DM</span></div><div class="wv"><select style="border:none;background:transparent;font-size:12px;outline:none;cursor:pointer;width:100%;color:#181818"><option>M1 — Handover Complete</option><option selected>M2 — Kickoff Complete</option><option>M3 — Scope Signoff</option><option>M4 — Build / Config Complete</option><option>M5 — Testing Complete</option><option>M6 — Launch Ready</option><option>M7 — Volume Ramping Up</option><option>M8 — Stabilization</option><option>M9 — Roll Off</option></select></div></div>
-      <div class="wu-field"><div class="wl">Forecast Date <span class="fm-b">formula</span></div><div class="wv formula">↳ From Project Info: Forecast Go-Live Date</div></div>
-      <div class="wu-field"><div class="wl">Forecast Confidence <span class="dm-b">DM</span></div><div class="wv"><select style="border:none;background:transparent;font-size:12px;outline:none;cursor:pointer;width:100%;color:#181818"><option>— Select —</option><option>🟢 High</option><option>🟡 Medium</option><option>🔴 Low</option></select></div></div>
-      <div class="wu-field"><div class="wl">Readiness Status <span class="fm-b">formula</span></div><div class="wv formula" id="wu-readiness">↳ From Section 4: 0 / 6 areas complete</div></div>
-      <div class="wu-field s2"><div class="wl">Current Blocker <span class="dm-b">DM</span></div><div class="wv"><input type="text" placeholder="Describe the most critical current blocker..."></div></div>
-      <div class="wu-field"><div class="wl">Dependency Owner <span class="dm-b">DM</span></div><div class="wv"><input type="text" placeholder="Name / role of blocker owner..."></div></div>
-      <div class="wu-field"><div class="wl">Waiting On Team <span class="dm-b">DM</span></div><div class="wv"><select style="border:none;background:transparent;font-size:12px;outline:none;cursor:pointer;width:100%;color:#181818"><option value="">— Select team —</option><option>Customer</option><option>Product</option><option>Legal</option><option>Risk</option><option>Compliance</option><option>SE</option><option>CE</option><option>Case team</option><option>Other — please specify</option></select></div></div>
-    </div>
-  </div>
-</div>
 <div style="height:48px"></div>
 </div>
 
@@ -833,11 +805,9 @@ function recalc() {
   const numEl=document.getElementById('overall-num');
   const cntEl=document.getElementById('overall-count');
   const barEl=document.getElementById('overall-bar');
-  const wuEl=document.getElementById('wu-readiness');
   if (numEl) numEl.textContent=preComplete;
   if (cntEl) cntEl.classList.toggle('done', preComplete===6);
   if (barEl) barEl.classList.toggle('all-done', preComplete===6);
-  if (wuEl)  wuEl.textContent=`↳ From Section 4: ${preComplete} / 6 areas complete`;
 
   updateMilestoneGates();
 }
@@ -875,7 +845,6 @@ document.querySelectorAll('.ms-node').forEach(node=>{
 
 function scrollToId(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 
-document.getElementById('wu-date').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 document.querySelectorAll('select.ss').forEach(colorSS);
 
 // ── Milestone gate auto-complete ─────────────────────────────────────────────
