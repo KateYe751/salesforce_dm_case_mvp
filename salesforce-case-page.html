@@ -122,6 +122,19 @@ input,select,textarea{font-family:inherit}
 .lg-text h4{font-size:11px;font-weight:600;margin-bottom:1px}
 .lg-text p{font-size:10px;color:#706e6b}
 .lg-text em{font-size:9px;color:#b0adab}
+/* 4.2 status definition table */
+.sdef-table{width:100%;border-collapse:collapse;font-size:11px}
+.sdef-table th,.sdef-table td{padding:6px 9px;border:1px solid #e5e5e5;vertical-align:top;line-height:1.4}
+.sdef-table thead th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;background:#f8f8f8;text-align:left}
+.sdef-th-status{width:80px;color:#706e6b}
+.sdef-th-int{color:#bf5800}
+.sdef-th-shr{color:#3e3e3c}
+.sdef-th-ext{color:#1e40af}
+.sdef-table tbody tr.sdef-green td{background:#f0fdf4}
+.sdef-table tbody tr.sdef-yellow td{background:#fefce8}
+.sdef-table tbody tr.sdef-red td{background:#fff5f5}
+.sdef-table td:first-child{white-space:nowrap;vertical-align:middle}
+.sdef-misc{font-size:10px;color:#706e6b;background:#fafaf9 !important;border-top:2px solid #e0dede !important}
 
 /* ── READINESS SECTIONS WITH VERTICAL TAB ── */
 .rs-wrap{display:flex;margin-bottom:10px;border-radius:4px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
@@ -200,6 +213,12 @@ table.rt tr:hover td{background:#fafaf9}
   100% { transform:scale(1); }
 }
 .ms-dot.ding { animation: msDing .5s ease forwards; }
+
+/* ── DEPENDENCY TYPE BADGES ── */
+.dep{display:inline-block;font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;margin-top:3px;letter-spacing:.3px;cursor:default}
+.dep-i{background:#fff3e0;color:#bf5800}   /* Internal — orange */
+.dep-s{background:#f4f4f4;color:#3e3e3c}   /* Shared  — dark   */
+.dep-e{background:#dbeafe;color:#1e40af}   /* External — blue  */
 
 /* ── DELIVERABLE LINKS ── */
 .del-wrap{margin-top:5px}
@@ -502,14 +521,45 @@ table.rt tr:hover td{background:#fafaf9}
 <!-- 4.2 Status Legend -->
 <div class="legend-card">
   <h3>4.2 Status Definitions</h3>
-  <div class="legend-grid">
-    <div class="lg-item"><span class="sbadge s-green">🟢 Green</span><div class="lg-text"><h4>No material risk</h4><p>Dependencies progressing normally</p><em>blocker &lt;7 days, forecast stable</em></div></div>
-    <div class="lg-item"><span class="sbadge s-yellow">🟡 Yellow</span><div class="lg-text"><h4>Risk, date still achievable</h4><p>Needs intervention or monitoring</p><em>waiting on product 5–10 days</em></div></div>
-    <div class="lg-item"><span class="sbadge s-red">🔴 Red</span><div class="lg-text"><h4>Blockers impacting launch</h4><p>Immediate intervention required</p><em>readiness blocked, unresponsive 2 wks</em></div></div>
-    <div class="lg-item"><span class="sbadge s-ns">⚫ Not Started</span><div class="lg-text"><h4>Not yet evaluated</h4><p>Readiness area not yet started</p><em>kickoff not completed</em></div></div>
-    <div class="lg-item"><span class="sbadge s-na">N/A</span><div class="lg-text"><h4>Not applicable</h4><p>Area does not apply to this project</p><em>no technical integration required</em></div></div>
-    <div class="lg-item"><span class="sbadge s-done">✓ Complete</span><div class="lg-text"><h4>Item completed</h4><p>All deliverables checked off</p><em>—</em></div></div>
-  </div>
+  <table class="sdef-table">
+    <thead>
+      <tr>
+        <th class="sdef-th-status">Status</th>
+        <th class="sdef-th-int">● Internal<br><span style="font-weight:400;font-size:9px;text-transform:none;letter-spacing:0">DM-team owned</span></th>
+        <th class="sdef-th-shr">● Shared<br><span style="font-weight:400;font-size:9px;text-transform:none;letter-spacing:0">Cross-team coordination</span></th>
+        <th class="sdef-th-ext">● External<br><span style="font-weight:400;font-size:9px;text-transform:none;letter-spacing:0">Customer-controlled</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="sdef-green">
+        <td><span class="sbadge s-green">🟢 Green</span></td>
+        <td>On track</td>
+        <td>On track</td>
+        <td>Customer confirmed on track</td>
+      </tr>
+      <tr class="sdef-yellow">
+        <td><span class="sbadge s-yellow">🟡 Yellow</span></td>
+        <td>Slightly behind — team can still absorb</td>
+        <td>Escalated, awaiting response</td>
+        <td>Customer hasn't confirmed, but not yet overdue</td>
+      </tr>
+      <tr class="sdef-red">
+        <td><span class="sbadge s-red">🔴 Red</span></td>
+        <td>Behind and unlikely to catch up</td>
+        <td>Overdue, no escalation response</td>
+        <td>Overdue — customer unresponsive or explicitly delayed</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="sdef-misc">
+          <span class="sbadge s-done">✓ Complete</span>&nbsp; All deliverables for this item are done &nbsp;·&nbsp;
+          <span class="sbadge s-ns">⚫ Not Started</span>&nbsp; Not yet evaluated &nbsp;·&nbsp;
+          <span class="sbadge s-na">N/A</span>&nbsp; Does not apply to this project
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 </div>
 
 <!-- ── COMMERCIAL READINESS ── -->
@@ -743,12 +793,12 @@ const SECS = [
 
 function colorSS(sel) {
   const v = sel.value;
-  if (v.includes('Complete'))    { sel.style.color='#0a6042'; sel.style.background='#f2fdf5'; }
-  else if (v.includes('Green'))  { sel.style.color='#0a6042'; sel.style.background='#f2fdf5'; }
-  else if (v.includes('Yellow')) { sel.style.color='#6b4800'; sel.style.background='#fffbec'; }
-  else if (v.includes('Red'))    { sel.style.color='#a8001c'; sel.style.background='#fff5f5'; }
-  else if (v==='N/A')            { sel.style.color='#706e6b'; sel.style.background='#fafaf9'; }
-  else                           { sel.style.color='#706e6b'; sel.style.background='#fff';    }
+  if (v.startsWith('✓') || v.includes('Complete')) { sel.style.color='#0a6042'; sel.style.background='#f2fdf5'; }
+  else if (v.startsWith('🟢'))                      { sel.style.color='#0a6042'; sel.style.background='#f2fdf5'; }
+  else if (v.startsWith('🟡'))                      { sel.style.color='#6b4800'; sel.style.background='#fffbec'; }
+  else if (v.startsWith('🔴'))                      { sel.style.color='#a8001c'; sel.style.background='#fff5f5'; }
+  else if (v === 'N/A')                             { sel.style.color='#706e6b'; sel.style.background='#fafaf9'; }
+  else                                              { sel.style.color='#706e6b'; sel.style.background='#fff';    }
 }
 
 function highlightRow(sel) {
@@ -758,28 +808,136 @@ function highlightRow(sel) {
   row.style.opacity = sel.value==='N/A' ? '0.6' : '1';
 }
 
+// ── Dependency type map ──────────────────────────────────────────────────────
+// External  = customer does the work
+// Internal  = DM-team controlled (no cross-team dependency)
+// Shared    = everything else (cross-team coordination)
+const EXT_ITEMS = new Set([
+  'Product Scope Confirmed',
+  'Customer Technical Ready',
+  'Build Complete',
+  'Demo Testing Finished',
+]);
+
+const INT_ITEMS = new Set([
+  'Pricing Confirmed',
+  'Handoff Completed',
+  'Product Availability Confirmed',
+  'Required Features Available',
+  'Product Risks Managed',
+  'Credentials / Access Ready',
+  'Production Access Ready',
+  'Environment Ready',
+  'Customer PM Assigned',
+  'Required Resources Available',
+  'KYC/KYB Capacity Confirmed',
+  'Pricing Config & Admins Complete',
+  'Internal Approvals Complete',
+  'Operational Stability',
+  'Knowledge Transfer Complete',
+  'Ownership Acceptance',
+]);
+
+const DEP_OPTS = {
+  internal: [
+    '✓ Complete',
+    '🟢 On Track',
+    '🟡 Slightly Behind — Team Absorbing',
+    '🔴 Behind — Unlikely to Catch Up',
+    '⚫ Not Started',
+    'N/A',
+  ],
+  shared: [
+    '✓ Complete',
+    '🟢 On Track',
+    '🟡 Escalated — Awaiting Response',
+    '🔴 Overdue — No Escalation Response',
+    '⚫ Not Started',
+    'N/A',
+  ],
+  external: [
+    '✓ Complete',
+    '🟢 Customer Confirmed — On Track',
+    '🟡 Not Yet Confirmed — Not Overdue',
+    '🔴 Overdue — Customer Unresponsive',
+    '⚫ Not Started',
+    'N/A',
+  ],
+};
+
+// Map current value's emoji to the matching option in the new set
+function emojiPrefix(v) {
+  if (v.startsWith('✓') || v.includes('Complete')) return '✓';
+  if (v.startsWith('🟢')) return '🟢';
+  if (v.startsWith('🟡')) return '🟡';
+  if (v.startsWith('🔴')) return '🔴';
+  if (v.startsWith('⚫')) return '⚫';
+  return null;
+}
+
+function injectDepBadges() {
+  document.querySelectorAll('table.rt tbody tr').forEach(row => {
+    const inameEl = row.querySelector('.iname');
+    const sel     = row.querySelector('select.ss');
+    if (!inameEl || !sel) return;
+    const name = inameEl.textContent.trim();
+    const dep  = EXT_ITEMS.has(name) ? 'external'
+               : INT_ITEMS.has(name) ? 'internal'
+               : 'shared';
+    sel.dataset.dep = dep;
+
+    // Replace options with contextual set, preserving current semantic value
+    const prev = emojiPrefix(sel.value);
+    const opts = DEP_OPTS[dep];
+    sel.innerHTML = opts.map(o => `<option>${o}</option>`).join('');
+    if (prev) {
+      const match = opts.find(o => o.startsWith(prev));
+      if (match) sel.value = match;
+    }
+    colorSS(sel);
+
+    // Badge
+    if (!row.querySelector('.dep')) {
+      const b = document.createElement('div');
+      const [cls, label, tip] =
+        dep === 'external' ? ['dep dep-e', '● External', 'External — customer-controlled. 🔴 Red directly risks go-live date.']
+      : dep === 'internal' ? ['dep dep-i', '● Internal', 'Internal — DM-team owned. 🔴 Red means behind with no recovery plan.']
+      :                      ['dep dep-s', '● Shared',   'Shared — cross-team coordination. 🔴 Red triggers internal escalation.'];
+      b.className   = cls;
+      b.textContent = label;
+      b.title       = tip;
+      inameEl.after(b);
+    }
+  });
+}
+
 function recalc() {
   let preComplete = 0;
   SECS.forEach(sec => {
     const sels = Array.from(document.querySelectorAll(`#body-${sec.id} select.ss`));
-    let done=0, red=0, yellow=0, green=0, na=0;
+    let done=0, extRed=0, sharedRed=0, intRed=0, extYellow=0, sharedYellow=0, intYellow=0, green=0, na=0;
     sels.forEach(s => {
-      const v = s.value;
-      if (v.includes('Complete'))    done++;
-      else if (v.includes('Red'))    red++;
-      else if (v.includes('Yellow')) yellow++;
-      else if (v.includes('Green'))  green++;
-      else if (v==='N/A')            na++;
+      const v   = s.value;
+      const dep = s.dataset.dep;
+      if (v.startsWith('✓') || v.includes('Complete')) done++;
+      else if (v.startsWith('🔴')) { if (dep==='external') extRed++; else if (dep==='internal') intRed++; else sharedRed++; }
+      else if (v.startsWith('🟡')) { if (dep==='external') extYellow++; else if (dep==='internal') intYellow++; else sharedYellow++; }
+      else if (v.startsWith('🟢')) green++;
+      else if (v === 'N/A')        na++;
     });
     const total = sels.length;
     const allResolved = (done+na)===total && total>0;
 
     let emoji, cls, badgeText, stateText, stateColor;
-    if (allResolved)       { emoji='✅'; cls='s-done';   badgeText=`✓ ${done}/${sec.total} done`; stateText='COMPLETE';     stateColor='#0a6042'; }
-    else if (red>0)        { emoji='🔴'; cls='s-red';    badgeText=`🔴 ${done}/${sec.total} done`; stateText='BLOCKED';     stateColor='#a8001c'; }
-    else if (yellow>0)     { emoji='🟡'; cls='s-yellow'; badgeText=`🟡 ${done}/${sec.total} done`; stateText='AT RISK';     stateColor='#b8860b'; }
-    else if (green||done)  { emoji='🟢'; cls='s-green';  badgeText=`🟢 ${done}/${sec.total} done`; stateText='IN PROGRESS'; stateColor='#2e7d32'; }
-    else                   { emoji='⚫'; cls='s-ns';     badgeText=`⚫ ${done}/${sec.total} done`; stateText='NOT STARTED'; stateColor='#706e6b'; }
+    if (allResolved)          { emoji='✅'; cls='s-done';   badgeText=`✓ ${done}/${sec.total} done`;  stateText='COMPLETE';      stateColor='#0a6042'; }
+    else if (extRed>0)        { emoji='🔴'; cls='s-red';    badgeText=`🔴 ${done}/${sec.total} done`; stateText='EXT BLOCKED';   stateColor='#a8001c'; }
+    else if (sharedRed>0)     { emoji='🔴'; cls='s-red';    badgeText=`🔴 ${done}/${sec.total} done`; stateText='ESCALATION';    stateColor='#c2410c'; }
+    else if (intRed>0)        { emoji='🔴'; cls='s-red';    badgeText=`🔴 ${done}/${sec.total} done`; stateText='AT RISK';       stateColor='#b91c1c'; }
+    else if (extYellow>0)     { emoji='🟡'; cls='s-yellow'; badgeText=`🟡 ${done}/${sec.total} done`; stateText='CUST AT RISK';  stateColor='#b45309'; }
+    else if (sharedYellow>0)  { emoji='🟡'; cls='s-yellow'; badgeText=`🟡 ${done}/${sec.total} done`; stateText='MONITORING';    stateColor='#b8860b'; }
+    else if (intYellow>0)     { emoji='🟡'; cls='s-yellow'; badgeText=`🟡 ${done}/${sec.total} done`; stateText='BEHIND';        stateColor='#b8860b'; }
+    else if (green||done)     { emoji='🟢'; cls='s-green';  badgeText=`🟢 ${done}/${sec.total} done`; stateText='IN PROGRESS';   stateColor='#2e7d32'; }
+    else                      { emoji='⚫'; cls='s-ns';     badgeText=`⚫ ${done}/${sec.total} done`; stateText='NOT STARTED';   stateColor='#706e6b'; }
 
     const badge = document.getElementById('badge-'+sec.id);
     if (badge) { badge.className='sbadge '+cls; badge.textContent=badgeText; }
@@ -920,6 +1078,9 @@ function updateMilestoneGates() {
       maxAutoDone === 9 ? 'M9 — Roll Off Complete' : `Current: M${curM} — ${name}`;
   }
 }
+
+// ── Dependency badges + initial recalc ───────────────────────────────────────
+injectDepBadges();
 
 // ── Deliverable link injection ────────────────────────────────────────────────
 document.querySelectorAll('table.rt tbody tr').forEach(row => {
