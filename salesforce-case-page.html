@@ -357,6 +357,9 @@ table.rt tr:hover td{background:#fafaf9}
           <div class="ms-name">Kickoff Complete</div>
           <div class="ms-desc">first intro of delivery team to customer</div>
         </div>
+        <div class="ms-tags">
+          <span class="rtag comm" onclick="scrollToId('r-comm')">▲ Commercial Readiness</span>
+        </div>
       </div>
 
       <!-- M3 -->
@@ -368,8 +371,8 @@ table.rt tr:hover td{background:#fafaf9}
           <div class="ms-desc">Products, regions, dependencies aligned</div>
         </div>
         <div class="ms-tags">
-          <span class="rtag comm" onclick="scrollToId('r-comm')">▲ Commercial Readiness</span>
-          <span class="rtag tech" onclick="scrollToId('r-techp')">▲ Technical Readiness (Planning)</span>
+          <span class="rtag tech" onclick="scrollToId('r-techp')">▲ Technical Readiness (Build)</span>
+          <span class="rtag prod" onclick="scrollToId('r-prod')">▲ Product Readiness</span>
         </div>
       </div>
 
@@ -392,7 +395,6 @@ table.rt tr:hover td{background:#fafaf9}
           <div class="ms-desc">Demo validation complete</div>
         </div>
         <div class="ms-tags">
-          <span class="rtag prod" onclick="scrollToId('r-prod')">▲ Product Readiness</span>
           <span class="rtag tech" onclick="scrollToId('r-teche')">▲ Technical Readiness (Execution)</span>
         </div>
       </div>
@@ -468,7 +470,7 @@ table.rt tr:hover td{background:#fafaf9}
       </div>
       <div class="r-card dim" id="oc-card-techp" onclick="scrollToId('r-techp')">
         <div class="oc-emoji" id="oc-emoji-techp">⚫</div>
-        <h4>Technical Planning</h4>
+        <h4>Technical Readiness (Build)</h4>
         <div class="oc-prog" id="oc-prog-techp">0 / 6 items</div>
         <div class="oc-state" id="oc-state-techp" style="color:#706e6b">NOT STARTED</div>
       </div>
@@ -567,7 +569,7 @@ table.rt tr:hover td{background:#fafaf9}
   <div class="rs-vtab v-comm" onclick="toggleRS('comm')">Commercial Readiness</div>
   <div class="rs-inner">
     <div class="rs-header" onclick="toggleRS('comm')">
-      <span class="ms-badge">▲ M3</span>
+      <span class="ms-badge">▲ M2</span>
       <span class="desc">Do we know what we are delivering and commercial ownership is clear?</span>
       <div class="rs-right">
         <span class="sbadge s-yellow" id="badge-comm">🟡 3 / 5 done</span>
@@ -578,11 +580,10 @@ table.rt tr:hover td{background:#fafaf9}
       <table class="rt">
         <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
         <tbody>
-          <tr><td><div class="iname">Contract Signed</div></td><td><div class="idesc">Signed MSA and stored</div></td><td><div class="idesc">MSA / agreement finalized</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Product Scope Confirmed</div></td><td><div class="idesc">Documents signed off by client on products to be delivered</div></td><td><div class="idesc">Signed off with client on what product to be delivered</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>🟡 Yellow</option><option>✓ Complete</option><option>🟢 Green</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Pricing Confirmed</div></td><td><div class="idesc">External pricing meeting done and aligned</div></td><td><div class="idesc">pricing / commercials aligned</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Handoff Completed</div></td><td><div class="idesc">Handoff sheet + recordings</div></td><td><div class="idesc">AE / AM / DM ownership aligned</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>⚫ Not Started</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Commercial Dependencies Identified</div><div class="idesc" style="font-style:italic;color:#b0adab">If applicable</div></td><td><div class="idesc">Log any dependencies in tracker</div></td><td><div class="idesc">commercial blockers known</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Handoff complete</div></td><td><div class="idesc">Handoff sheet + recordings</div></td><td><div class="idesc">AE / AM / DM ownership aligned</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Contract reviewed and stored</div></td><td><div class="idesc">Review MSA and store contract</div></td><td><div class="idesc">MSA / agreement reviewed and filed</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Use case confirmed</div></td><td><div class="idesc">Use case documentation</div></td><td><div class="idesc">Purpose and coverage confirmed with client</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Commercial dependencies identified</div></td><td><div class="idesc">Log dependencies in tracker</div></td><td><div class="idesc">Commercial blockers known</div></td><td><select class="ss" data-sec="comm" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
         </tbody>
       </table>
     </div>
@@ -591,13 +592,13 @@ table.rt tr:hover td{background:#fafaf9}
 
 <!-- ── TECHNICAL PLANNING ── -->
 <div id="r-techp" class="rs-wrap">
-  <div class="rs-vtab v-techp" onclick="toggleRS('techp')">Technical Planning</div>
+  <div class="rs-vtab v-techp" onclick="toggleRS('techp')">Technical Readiness (Build)</div>
   <div class="rs-inner">
     <div class="rs-header" onclick="toggleRS('techp')">
       <span class="ms-badge">▲ M3</span>
       <span class="desc">Can customers technically start implementing?</span>
       <div class="rs-right">
-        <span class="sbadge s-ns" id="badge-techp">⚫ 0 / 6 done</span>
+        <span class="sbadge s-ns" id="badge-techp">⚫ 0 / 7 done</span>
         <span class="toggle" id="icon-techp">▼</span>
       </div>
     </div>
@@ -605,12 +606,10 @@ table.rt tr:hover td{background:#fafaf9}
       <table class="rt">
         <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
         <tbody>
-          <tr><td><div class="iname">Fund Flow Confirmed</div></td><td><div class="idesc">Fund flow aligned with client</div></td><td><div class="idesc">E2E transaction flow aligned</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Integration Scope Confirmed</div></td><td><div class="idesc">Integration guide shared with client</div></td><td><div class="idesc">APIs / components defined</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Integration Roadmap Confirmed</div></td><td><div class="idesc">Build roadmap aligned with client</div></td><td><div class="idesc">Roadmap and timeline aligned</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Customer Technical Ready</div></td><td><div class="idesc">Customer technical owner assigned, implementation plan confirmed</div></td><td><div class="idesc">Customer confirmed no technical build limitations</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Credentials / Access Ready</div></td><td><div class="idesc">Sandbox account, API credentials and documents shared</div></td><td><div class="idesc">sandbox / credentials available</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Technical Dependencies Identified</div><div class="idesc" style="font-style:italic;color:#b0adab">If applicable</div></td><td><div class="idesc">Log any dependencies in tracker</div></td><td><div class="idesc">Technical blockers known</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Fundflow confirmed</div></td><td><div class="idesc">Fund flow diagram aligned with client</div></td><td><div class="idesc">E2E transaction flow aligned</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Integration setup</div></td><td><div class="idesc">Integration guide shared with client</div></td><td><div class="idesc">APIs / components and build type defined</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Integration roadmap confirmed</div></td><td><div class="idesc">Build roadmap aligned with client</div></td><td><div class="idesc">Timeline and go-live date aligned</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer technical ready</div></td><td><div class="idesc">Customer technical owner assigned, implementation plan confirmed</div></td><td><div class="idesc">Customer confirmed no technical limitations</div></td><td><select class="ss" data-sec="techp" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
         </tbody>
       </table>
     </div>
@@ -622,7 +621,7 @@ table.rt tr:hover td{background:#fafaf9}
   <div class="rs-vtab v-prod" onclick="toggleRS('prod')">Product Readiness</div>
   <div class="rs-inner">
     <div class="rs-header" onclick="toggleRS('prod')">
-      <span class="ms-badge">▲ M5</span>
+      <span class="ms-badge">▲ M3</span>
       <span class="desc">Can required products actually support launch?</span>
       <div class="rs-right">
         <span class="sbadge s-ns" id="badge-prod">⚫ 0 / 3 done</span>
@@ -633,9 +632,9 @@ table.rt tr:hover td{background:#fafaf9}
       <table class="rt">
         <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
         <tbody>
-          <tr><td><div class="iname">Product Availability Confirmed</div></td><td><div class="idesc">Products to be delivered confirmed</div></td><td><div class="idesc">region / entity support verified</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Required Features Available</div></td><td><div class="idesc">Feature availability assessment completed</div></td><td><div class="idesc">All required capabilities available or workaround agreed</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Product Risks Managed</div></td><td><div class="idesc">Product gap risk log reviewed and agreed</div></td><td><div class="idesc">Roadmap gaps, limitations and escalations documented (GSE)</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Product confirmed</div></td><td><div class="idesc">Products to be delivered confirmed</div></td><td><div class="idesc">Region / entity support verified</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Feature availability confirmed</div></td><td><div class="idesc">Feature availability assessment completed</div></td><td><div class="idesc">All required capabilities available or workaround agreed</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Product gaps managed</div></td><td><div class="idesc">Product gap risk log reviewed</div></td><td><div class="idesc">Roadmap gaps, limitations and escalations documented</div></td><td><select class="ss" data-sec="prod" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
         </tbody>
       </table>
     </div>
@@ -658,10 +657,10 @@ table.rt tr:hover td{background:#fafaf9}
       <table class="rt">
         <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
         <tbody>
-          <tr><td><div class="iname">Build Complete</div></td><td><div class="idesc">Client build completed</div></td><td><div class="idesc">Client completes the build</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Demo Testing Finished</div></td><td><div class="idesc">Demo test results approved</div></td><td><div class="idesc">Pass demo testing</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Production Access Ready</div></td><td><div class="idesc">Production credentials issued and validated</div></td><td><div class="idesc">credentials available</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Environment Ready</div></td><td><div class="idesc">Production environment configuration completed</div></td><td><div class="idesc">production env ready</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Build complete</div></td><td><div class="idesc">Client build completed</div></td><td><div class="idesc">Client completes the build</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Demo testing review complete</div></td><td><div class="idesc">Demo test results approved</div></td><td><div class="idesc">Pass demo testing</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Production access ready</div></td><td><div class="idesc">Production credentials issued and validated</div></td><td><div class="idesc">Credentials available</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Production environment ready</div></td><td><div class="idesc">Production environment configuration completed</div></td><td><div class="idesc">Production env ready</div></td><td><select class="ss" data-sec="teche" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
         </tbody>
       </table>
     </div>
@@ -684,11 +683,8 @@ table.rt tr:hover td{background:#fafaf9}
       <table class="rt">
         <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
         <tbody>
-          <tr><td><div class="iname">KYC/KYB Capacity Confirmed</div></td><td><div class="idesc">Onboarding capacity approval confirmed with Ops team</div></td><td><div class="idesc">onboarding approval done</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Onboarding Roadmap Aligned</div></td><td><div class="idesc">Agreed onboarding plan + target volume ramp up timeline</div></td><td><div class="idesc">Client aligned with onboarding plan</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Pricing Config &amp; Admins Complete</div></td><td><div class="idesc">Pricing config done by CE team / forms submitted</div></td><td><div class="idesc">configs done</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Internal Approvals Complete</div></td><td><div class="idesc">Required approvals documented (risks, compliance, product)</div></td><td><div class="idesc">approvals completed</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Support Model Aligned</div></td><td><div class="idesc">Support model prepared and shared with client</div></td><td><div class="idesc">POC ready and escalation path ready</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Onboarding roadmap aligned</div></td><td><div class="idesc">Agreed onboarding plan + volume ramp timeline</div></td><td><div class="idesc">Client aligned with onboarding plan and timeline</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Operational setup complete</div></td><td><div class="idesc">Operational setup checklist completed</div></td><td><div class="idesc">All operational configurations completed</div></td><td><select class="ss" data-sec="ops" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
         </tbody>
       </table>
     </div>
@@ -711,11 +707,8 @@ table.rt tr:hover td{background:#fafaf9}
       <table class="rt">
         <thead><tr><th style="width:18%">Item</th><th style="width:25%">Deliverable</th><th style="width:27%">Description</th><th style="width:16%">Status</th><th style="width:14%">Waiting On</th></tr></thead>
         <tbody>
-          <tr><td><div class="iname">Customer PM Assigned</div></td><td><div class="idesc">Customer project team assigned, ready to take over / co-lead onboarding</div></td><td><div class="idesc">owner onboarding POC exists</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Required Resources Available</div></td><td><div class="idesc">Customer resource commitment confirmed</div></td><td><div class="idesc">staffing ready</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Client Training Completed</div></td><td><div class="idesc">Training complete / recording shared</div></td><td><div class="idesc">onboarding complete</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Customer Dependencies Tracked</div></td><td><div class="idesc">Customer dependency tracker reviewed and agreed</div></td><td><div class="idesc">dependencies visible</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
-          <tr><td><div class="iname">Customer Timelines Confirmed</div></td><td><div class="idesc">Agreed onboarding plan timeline / target volume ramp up</div></td><td><div class="idesc">commitment aligned</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer operational readiness</div></td><td><div class="idesc">Customer readiness assessment completed</div></td><td><div class="idesc">Customer team trained and ready</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
+          <tr><td><div class="iname">Customer dependencies tracked</div></td><td><div class="idesc">Customer dependency tracker reviewed</div></td><td><div class="idesc">Dependencies visible and managed</div></td><td><select class="ss" data-sec="cust" onchange="onStatusChange(this)"><option>⚫ Not Started</option><option>✓ Complete</option><option>🟢 Green</option><option>🟡 Yellow</option><option>🔴 Red</option><option>N/A</option></select></td><td><select class="ws"></select></td></tr>
         </tbody>
       </table>
     </div>
@@ -782,12 +775,12 @@ const WO = `<option value="">—</option><option>Customer</option><option>Produc
 document.querySelectorAll('select.ws').forEach(s => { s.innerHTML = WO; });
 
 const SECS = [
-  { id:'comm',  total:5, pre:true  },
-  { id:'techp', total:6, pre:true  },
+  { id:'comm',  total:4, pre:true  },
+  { id:'techp', total:4, pre:true  },
   { id:'prod',  total:3, pre:true  },
   { id:'teche', total:4, pre:true  },
-  { id:'ops',   total:5, pre:true  },
-  { id:'cust',  total:5, pre:true  },
+  { id:'ops',   total:2, pre:true  },
+  { id:'cust',  total:2, pre:true  },
   { id:'bau',   total:4, pre:false },
 ];
 
@@ -813,29 +806,22 @@ function highlightRow(sel) {
 // Internal  = DM-team controlled (no cross-team dependency)
 // Shared    = everything else (cross-team coordination)
 const EXT_ITEMS = new Set([
-  'Product Scope Confirmed',
-  'Customer Technical Ready',
-  'Build Complete',
-  'Demo Testing Finished',
+  'Use case confirmed',
+  'Customer technical ready',
+  'Build complete',
+  'Customer operational readiness',
 ]);
 
 const INT_ITEMS = new Set([
-  'Pricing Confirmed',
-  'Handoff Completed',
-  'Product Availability Confirmed',
-  'Required Features Available',
-  'Product Risks Managed',
-  'Credentials / Access Ready',
-  'Production Access Ready',
-  'Environment Ready',
-  'Customer PM Assigned',
-  'Required Resources Available',
-  'KYC/KYB Capacity Confirmed',
-  'Pricing Config & Admins Complete',
-  'Internal Approvals Complete',
-  'Operational Stability',
-  'Knowledge Transfer Complete',
-  'Ownership Acceptance',
+  'Handoff complete',
+  'Contract reviewed and stored',
+  'Commercial dependencies identified',
+  'Product confirmed',
+  'Feature availability confirmed',
+  'Production access ready',
+  'Production environment ready',
+  'Operational setup complete',
+  'Customer dependencies tracked',
 ]);
 
 const DEP_OPTS = {
@@ -1007,8 +993,9 @@ document.querySelectorAll('select.ss').forEach(colorSS);
 
 // ── Milestone gate auto-complete ─────────────────────────────────────────────
 const GATES = {
-  3: ['comm', 'techp'],   // M3: Commercial Readiness + Technical Planning
-  5: ['prod', 'teche'],   // M5: Product Readiness + Technical Execution
+  2: ['comm'],                    // M2: Commercial Readiness
+  3: ['techp', 'prod'],           // M3: Technical Readiness (Build) + Product Readiness
+  5: ['teche'],                   // M5: Technical Execution
   6: ['ops',  'cust'],    // M6: Operational Readiness + Customer Readiness
   9: ['bau'],             // M9: BAU Readiness
 };
@@ -1029,7 +1016,7 @@ function updateMilestoneGates() {
 
   // Highest milestone whose gate is satisfied (and all prior gated ones too, sequentially)
   // We treat it as sequential: M5 can't auto-complete unless M3 is also done
-  const gateOrder = [3, 5, 6, 9];
+  const gateOrder = [2, 3, 5, 6, 9];
   let maxAutoDone = 0;
   for (const m of gateOrder) {
     if (gateDone[m]) maxAutoDone = m;
